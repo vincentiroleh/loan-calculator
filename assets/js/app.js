@@ -1,7 +1,7 @@
 // Listen for submit
 const loanForm = document.querySelector('#loan-form');
 
-loanForm.addEventListener('submit', (e)=> {
+loanForm.addEventListener('submit', (e) => {
     // Hide result
     document.querySelector('#result').style.display = 'none';
 
@@ -9,7 +9,7 @@ loanForm.addEventListener('submit', (e)=> {
     document.querySelector('#loading').style.display = 'block';
 
     setTimeout(calculateResults, 2000);
-e.preventDefault();
+    e.preventDefault();
 });
 
 
@@ -32,10 +32,10 @@ function calculateResults() {
     const x = Math.pow(1 + calculatedInterested, calculatedPayment);
     const monthly = (principal * x * calculatedInterested) / (x - 1);
 
-    if(isFinite(monthly)) {
-        monthlyPayment.value= monthly.toFixed(2);
+    if (isFinite(monthly)) {
+        monthlyPayment.value = monthly.toFixed(2);
         totalPayment.value = (monthly * calculatedPayment).toFixed(2);
-        totalInterest.value = ((monthly* calculatedPayment)-principal).toFixed(2);
+        totalInterest.value = ((monthly * calculatedPayment) - principal).toFixed(2);
 
         // Show Results
         document.querySelector('#result').style.display = 'block';
@@ -46,17 +46,17 @@ function calculateResults() {
         showError('Pleas check your numbers');
     }
 
-    
+
 }
 
 // Show Error Message
-const showError = (error)=> {
+const showError = (error) => {
     // Hide result
     document.querySelector('#result').style.display = 'none';
 
     // Hide loader
     document.querySelector('#loading').style.display = 'none';
-    
+
     // Create a div
     const errorDiv = document.createElement('div');
 
@@ -79,6 +79,14 @@ const showError = (error)=> {
 }
 
 // clear error 
-const clearError = ()=> {
+const clearError = () => {
     document.querySelector('.alert').remove();
+}
+
+
+// Register Service Worker
+if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/loan-calculator/sw.js')
+        .then(reg => console.log('Service Worker Registered'))
+        .catch(err => console.log('Service worker not registered', err));
 }
